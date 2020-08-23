@@ -2,7 +2,8 @@ import mplfinance as mpf
 import pandas as pd
 
 
-df= pd.read_csv('TSLA.csv',parse_dates=True, index_col=0)
+df= pd.read_csv('./csv/TSLA.csv',parse_dates=True, index_col=0)
+print(df.head())
 mpf.plot(df,
         type='candle', # graph type (like bars, candlestick...)
         style='charles', # graph color ('chales' is green for pos, red for neg)

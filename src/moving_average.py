@@ -7,7 +7,7 @@ import pandas_datareader.data as web
 style.use('ggplot')
 
 # we use parse_dates and index_col so date is an index (and it's column 0)
-df  = pd.read_csv('tsla.csv', parse_dates=True, index_col=0)
+df  = pd.read_csv('./csv/tsla.csv', parse_dates=True, index_col=0)
 # min_periods so .head() does not present NaN bc there were no 100 previous days.
 df['100 M.A.'] = df['Adj Close'].rolling(window=100, min_periods=0).mean()
 print(df.head())
