@@ -11,6 +11,6 @@ mpf.plot(df,
         ylabel='Price (US Dollars)',
         figratio=(25,10), # figure proportions. (25, 10) means x is 2.5 times y.
         mav=100, # (x-day) moving average
-        ylabel_lower='Volume in millions',
+        ylabel_lower='Volume in 10M',
         volume=True
         )
