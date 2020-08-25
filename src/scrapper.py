@@ -44,8 +44,9 @@ def get_data_from_yahoo(reload_sp500=False):
     end = dt.datetime(2020,5,31)
 
     curr_ticker = 1
-    for ticker in tickers[:500]:
-        print(f'==> {curr_ticker}/500\t Searching for {ticker}')
+    total_tickers = len(tickers)
+    for ticker in tickers:
+        print(f'==> {curr_ticker}/{total_tickers}\t Searching for {ticker}')
         curr_ticker += 1
         if not os.path.exists(f'../data/stocks_dfs/{ticker}.csv'):
             df = web.DataReader(ticker, 'yahoo', start, end)
