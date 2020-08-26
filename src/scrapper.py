@@ -6,6 +6,8 @@ import bs4 as bs
 import requests as req
 import pandas as pd
 import pandas_datareader.data as web
+import matplotlib.pyplot as plt
+from matplotlib import style
 
 def save_sp500_tickers():
     res = req.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
@@ -55,4 +57,37 @@ def get_data_from_yahoo(reload_sp500=False):
         else:
             print(f'\t\t... {ticker} already exists\n')
 
-get_data_from_yahoo()
+# get_data_from_yahoo()
+
+def compile_data():
+    with open('../data/sp500_tickers.pickle', 'rb') as f:
+        tickers = pickle.load(f)
+
+    main_df = pd.DataFrame()
+
+    for count, ticker in enumerate(tickers):
+        df = pd.read_csv(f'../data/stocks_dfs/{ticker}.csv')
+        df.set_index('Date', inplace=True)
+
+        df.rename(columns = {'Adj Close': ticker}, inplace=True)
+        df.drop(['Open','High','Low','Close','Volume'], 1, inplace=True)
+
+        if main_df.empty:
+            main_df = df
+        else:
+            main_df = main_df.join(df, how='outer')
+
+        if count % 10 == 0:
+            print(count)
+
+    print(main_df.tail())
+    main_df.to_csv('../data/sp500_joined_adjcloses.csv')
+
+# compile_data()
+
+def visualize_data():
+    df = pd.read_csv('../data/sp500_joined_adjcloses.csv')
+    df['AAPL'].plot()
+    plt.show()
+
+visualize_data()
