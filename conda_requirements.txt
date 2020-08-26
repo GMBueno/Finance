@@ -4,7 +4,7 @@
 beautifulsoup4=4.9.1=py38_0
 blas=1.0=mkl
 brotlipy=0.7.0=py38haf1e3a3_1000
-ca-certificates=2020.6.24=0
+ca-certificates=2020.7.22=0
 certifi=2020.6.20=py38_0
 cffi=1.14.1=py38hed5b41f_0
 chardet=3.0.4=py38_1003
@@ -36,6 +36,8 @@ mkl=2019.4=233
 mkl-service=2.3.0=py38hfbe908c_0
 mkl_fft=1.1.0=py38hc64f4ea_0
 mkl_random=1.1.1=py38h959d312_0
+mpl-finance=0.10.1=pypi_0
+mplfinance=0.12.7a0=pypi_0
 ncurses=6.2=h0a44026_1
 numpy=1.19.1=py38h3b9f5b6_0
 numpy-base=1.19.1=py38hcfb5961_0
@@ -56,6 +58,7 @@ readline=8.0=h1de35cc_0
 requests=2.24.0=py_0
 scikit-learn=0.23.1=py38h603561c_0
 scipy=1.5.0=py38hbab996c_0
+seaborn=0.10.1=py_0
 setuptools=49.6.0=py38_0
 six=1.15.0=py_0
 soupsieve=2.0.1=py_0
