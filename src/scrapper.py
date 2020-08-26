@@ -8,6 +8,8 @@ import pandas as pd
 import pandas_datareader.data as web
 import matplotlib.pyplot as plt
 from matplotlib import style
+import seaborn as sns
+import numpy as np
 
 def save_sp500_tickers():
     res = req.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
@@ -85,9 +87,43 @@ def compile_data():
 
 # compile_data()
 
-def visualize_data():
+def get_correlation_table():
     df = pd.read_csv('../data/sp500_joined_adjcloses.csv')
-    df['AAPL'].plot()
-    plt.show()
+    # df['AAPL'].plot()
+    # plt.show()
+
+    df.set_index('Date', inplace=True)
+    '''
+    We wanna check  how closely related the stock movement is to each other.
+    It's better to measure the correlation of the % of variation of Adj Close in
+    different stocks, not just amount variatiob. Let's say stock X is $100 and
+    stock B is $10 and they move 1$. The variation in amount is pretty different
+    than the variation in percentage, that makes more sense when evaluating
+    correlation.
+    '''
+    df_corr = df.pct_change().corr()
+    df_corr.to_csv('../data/sp500_correlation.csv')
+
+    with open('../data/sp500_correlation.pickle', 'wb') as f:
+        pickle.dump(df_corr, f)
+
+# get_correlation_table()
+
+def visualize_data():
+    with open('../data/sp500_correlation.pickle', 'rb') as f:
+        df = pickle.load(f)
+
+    heatmap = sns.heatmap(df,
+        annot=False,
+        cmap='RdYlGn',
+        xticklabels='auto', yticklabels='auto',
+        vmin = -1.0, vmax = 1.0)
+
+    # plt.show()
+    # TODO: save figure with non-overlapping labels (will obvs be very large,
+    # since the table is 500x500. If a label font is ~20 pixels in x or y, would
+    # be an img with resolution of at least 10.000x10.000 (3x size of an 8K img)
+    heatmap = heatmap.get_figure()
+    heatmap.savefig('../static/sp500_correlation_matrix.png', dpi=400)
 
 visualize_data()
