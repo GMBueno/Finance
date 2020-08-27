@@ -11,7 +11,11 @@ from matplotlib import style
 import seaborn as sns
 import numpy as np
 
-def save_sp500_tickers():
+def scrap_and_save_sp500_tickers():
+    '''
+    Scraps list of S&P 500 from Wikipedia then saves their stock symbols/tickers
+    as a python object (using pickle)
+    '''
     res = req.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
     soup = bs.BeautifulSoup(res.text, features='lxml')
     table = soup.find('table', {"id": "constituents"})
@@ -35,8 +39,11 @@ def save_sp500_tickers():
 
 
 def get_data_from_yahoo(reload_sp500=False):
+    '''
+    For all stock tickers, gets their stock data from Yahoo Finance and save csv
+    '''
     if reload_sp500:
-        tickers = save_sp500_tickers()
+        tickers = scrap_and_save_sp500_tickers()
     else:
         with open('../data/sp500_tickers.pickle', 'rb') as f:
             tickers = pickle.load(f)
@@ -62,6 +69,10 @@ def get_data_from_yahoo(reload_sp500=False):
 # get_data_from_yahoo()
 
 def compile_data():
+    '''
+    For every stock ticker, gets their csv, drops all columns but 'Adj Close'
+    and joins into a csv (in the end containing S&P 500 stocks Adj Close)
+    '''
     with open('../data/sp500_tickers.pickle', 'rb') as f:
         tickers = pickle.load(f)
 
@@ -88,6 +99,10 @@ def compile_data():
 # compile_data()
 
 def get_correlation_table():
+    '''
+    Calculates the correlation matrix of all the stocks in
+    'sp500_joined_adjcloses.csv'
+    '''
     df = pd.read_csv('../data/sp500_joined_adjcloses.csv')
     # df['AAPL'].plot()
     # plt.show()
