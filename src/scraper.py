@@ -101,7 +101,7 @@ def compile_data():
 def get_correlation_table():
     '''
     Calculates the correlation matrix of all the stocks in
-    'sp500_joined_adjcloses.csv'
+    'sp500_joined_adjcloses.csv' 
     '''
     df = pd.read_csv('../data/sp500_joined_adjcloses.csv')
     # df['AAPL'].plot()
