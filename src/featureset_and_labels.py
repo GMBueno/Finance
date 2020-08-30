@@ -1,5 +1,12 @@
 import numpy as np
 import pandas as pd
+# support vector machine, neighbors for keynyan neighbors
+from sklearn import svm, neighbors
+# for cross validation
+from sklearn.model_selection import train_test_split
+# voting classifier bc we are going to use many classifiers and let them vote
+# what strategy is best. Random forest is another classifier
+from sklearn.ensemble import VotingClassifier, RandomForestClassifier
 
 from collections import Counter
 import pickle
@@ -50,7 +57,7 @@ def process_data_for_labels(ticker):
     df.fillna(0, inplace=True)
     # print(df[f'{ticker}'])
     # print(df[f'{ticker}_1d'])
-    print(df.tail())
+    # print(df.tail())
     return tickers, df
 
 # process_data_for_labels('AAPL')
@@ -90,7 +97,10 @@ def extract_feature_sets(ticker):
     # better than random or just "buybuybuy", since stocks are usually going up.
     vals = df[f'{ticker}_target'].values.tolist()
     str_vals = [str(i) for i in vals]
-    # print('Data spread:', Counter(str_vals))
+
+    # printing data spread
+    count = Counter(str_vals)
+    print('Data spread:\t\t', {'Up':count['1'],'Still':count['0'],'Down':count['-1']})
 
     # some cleaning
     df.fillna(0, inplace=True)
@@ -104,9 +114,75 @@ def extract_feature_sets(ticker):
 
     # X is our feature set (daily percentage change for all stocks)
     X = df_vals.values
-    # y is our labels (buy or sell or hold column (aswer))
+    # y is our labels (buy or sell or hold column (aswer) just for given ticker)
     y = df[f'{ticker}_target'].values
 
     return X, y, df
 
-extract_feature_sets('GE')
+# extract_feature_sets('GE')
+
+def do_ml(ticker):
+    X, y, df = extract_feature_sets(ticker)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+
+    # classifier
+    clf = neighbors.KNeighborsClassifier()
+
+    clf.fit(X_train, y_train)
+    confidence = clf.score(X_test, y_test)
+
+    # if you want to not retrain the model, just pickle it.
+    predictions = clf.predict(X_test)
+
+    print('Prediction spread:\t', count(predictions))
+    print(f'Accuracy {int(confidence*10000)/100.0}%')
+
+    return confidence
+
+def count(data):
+    count = Counter(data)
+    ans = {
+        'Buy':count[1],
+        'Hold':count[0],
+        'Sell':count[-1],
+        }
+    return ans
+
+# print('==> BAC') # Bank of America
+# do_ml('BAC')
+# print('\n==> AAPL') # Apple
+# do_ml('AAPL')
+# print('\n==> FB') # Facebook
+# do_ml('FB')
+# print('\n==> AMZN') # Amazon
+# do_ml('AMZN')
+# print('\n==> GE') # General Electric
+# do_ml('GE')
+
+'''
+==> BAC
+Data spread:		 {'Up': 1869, 'Still': 1582, 'Down': 1683}
+Prediction spread:	 {'Buy': 407, 'Hold': 412, 'Sell': 465}
+Accuracy 63.78%
+
+==> AAPL
+Data spread:		 {'Up': 2282, 'Still': 967, 'Down': 1885}
+Prediction spread:	 {'Buy': 532, 'Hold': 219, 'Sell': 533}
+Accuracy 61.37%
+
+==> FB
+Data spread:		 {'Up': 886, 'Still': 3567, 'Down': 681}
+Prediction spread:	 {'Buy': 197, 'Hold': 910, 'Sell': 176}
+Accuracy 85.11%
+
+==> AMZN
+Data spread:		 {'Up': 2307, 'Still': 864, 'Down': 1963}
+Prediction spread:	 {'Buy': 547, 'Hold': 214, 'Sell': 523}
+Accuracy 63.31%
+
+==> GE
+Data spread:		 {'Up': 1720, 'Still': 1709, 'Down': 1705}
+Prediction spread:	 {'Buy': 366, 'Hold': 432, 'Sell': 486}
+Accuracy 62.69%
+'''
