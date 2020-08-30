@@ -3,7 +3,7 @@ import pandas as pd
 # support vector machine, neighbors for keynyan neighbors
 from sklearn import svm, neighbors
 # for cross validation
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, TimeSeriesSplit
 # voting classifier bc we are going to use many classifiers and let them vote
 # what strategy is best. Random forest is another classifier
 from sklearn.ensemble import VotingClassifier, RandomForestClassifier
@@ -74,11 +74,15 @@ def buy_sell_hold(*args):
     '''
     cols = [col for col in args]
     requirement = 0.02 # means 2%
+    daily_avg_return = 0.000371
     for col in cols:
-        if col > requirement:
+        if col > (requirement + daily_avg_return):
             return 1  # buy
-        if col < -requirement:
+        if col < -(requirement - daily_avg_return):
             return -1  # sell
+
+    # curiosity: The average annualized total return for the S&P 500 index over
+    # the past 90 years is ~9.8 percent. And around 252 trading days per yer.
     return 0  # hold
 
 def extract_feature_sets(ticker):
@@ -124,10 +128,25 @@ def extract_feature_sets(ticker):
 def do_ml(ticker):
     X, y, df = extract_feature_sets(ticker)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+    # we can't do the following because if you give our classifier future data
+    # to train on and then test it on past data, it will know things that have
+    # not happened yet.
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+
+    # So we can select the first 70% of our data for training the model as the
+    # data is indexed on date it will be chronological
+    X_train = X[:int(X.shape[0]*0.75)]
+    X_test = X[int(X.shape[0]*0.75):]
+    y_train = y[:int(X.shape[0]*0.75)]
+    y_test = y[int(X.shape[0]*0.75):]
+
 
     # classifier
-    clf = neighbors.KNeighborsClassifier()
+    # VotingClassifier chooses the best performer.
+    # note: classifiers have a lot of parameteres, we are using mostly defaults.
+    clf = VotingClassifier([('kneighbors', neighbors.KNeighborsClassifier()),
+                            ('randforest', RandomForestClassifier())])
+                            # ('lsupvector', svm.LinearSVC(max_iter=1000)),
 
     clf.fit(X_train, y_train)
     confidence = clf.score(X_test, y_test)
@@ -149,18 +168,18 @@ def count(data):
         }
     return ans
 
-# print('==> BAC') # Bank of America
-# do_ml('BAC')
-# print('\n==> AAPL') # Apple
-# do_ml('AAPL')
-# print('\n==> FB') # Facebook
-# do_ml('FB')
-# print('\n==> AMZN') # Amazon
-# do_ml('AMZN')
-# print('\n==> GE') # General Electric
-# do_ml('GE')
+print('==> BAC') # Bank of America
+do_ml('BAC')
+print('\n==> AAPL') # Apple
+do_ml('AAPL')
+print('\n==> FB') # Facebook
+do_ml('FB')
+print('\n==> AMZN') # Amazon
+do_ml('AMZN')
+print('\n==> GE') # General Electric
+do_ml('GE')
 
-'''
+'''Results (for 2% requirement):
 ==> BAC
 Data spread:		 {'Up': 1869, 'Still': 1582, 'Down': 1683}
 Prediction spread:	 {'Buy': 407, 'Hold': 412, 'Sell': 465}
