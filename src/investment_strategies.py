@@ -1,8 +1,6 @@
-import datetime as dt
-import matplotlib.pyplot as plt
-from matplotlib import style
 import pandas as pd
 import pandas_datareader.data as web
+import numpy as np
 
 '''
 Compare the following investment strategies, showing which had the highest
@@ -21,10 +19,56 @@ closes = df['Adj Close']
 # close = closes['2020-06-03']
 # print(close)
 
+'''
+1995 0
+1996 246
+1997 494
+1998 743
+1999 990
+2000 1236
+2001 1484
+2002 1731
+2003 1978
+2004 2228
+2005 2477
+2006 2726
+2007 2972
+2008 3217
+2009 3466
+2010 3712
+2011 3959
+2012 4208
+2013 4452
+2014 4700
+2015 4948
+2016 5196
+2017 5443
+2018 5690
+2019 5934
+2020 6181
+1995-2005 0-2476
+1996-2006 246-2725
+1997-2007 494-2971
+1998-2008 743-3216
+1999-2009 990-3465
+2000-2010 1236-3711
+2001-2011 1484-3958
+2002-2012 1731-4207
+2003-2013 1978-4451
+2004-2014 2228-4699
+2005-2015 2477-4947
+2006-2016 2726-5197
+2007-2017 2972-5442
+2008-2018 3217-5689
+2009-2019 3466-5933
+2010-2020 3712-6181
+
+'''
 
 def calc_i():
     wallet = 100
     day = '1'
+    wallets = []
     for year in range(1995, 2011):
         initial_year = str(year)
         final_year = str(year + 10)
@@ -32,7 +76,19 @@ def calc_i():
         final_price = find_first_price_of_year(final_year)
         appreciation = final_price/initial_price
         wallet = wallet*appreciation
+        wallets.append([initial_year, final_year, appreciation])
+    return wallets
+
+def print_calc_i():
+    wallets = calc_i()
+    avg_appreciation = 0
+    for wallet in wallets:
+        initial_year = wallet[0]
+        final_year = wallet[1]
+        appreciation = wallet[2]
         print(f'From {initial_year} to {final_year}: {appreciation*100:.2f}%')
+        avg_appreciation += appreciation
+    print(f'Average appreciation: {(avg_appreciation/len(wallets))*100:.2f}%')
 
 def find_first_price_of_year(year):
     for day in range(1,9):
@@ -43,15 +99,89 @@ def find_first_price_of_year(year):
         except:
             continue
 
+def calc_sharpe():
+    # wallet = calc_i()[0]
+    test = np.array([1, 2, 3])
+    print(f'Risco: {test.std()}')
+
 # def calc_ii():
 #     for i, date, close in enumerate(closes):
 #         if i%30 == 0:
 #             invest
 
 
-# def buy(date, amount):
-#
-#
-# def sell(date, amount):
 
-calc_i()
+# print_calc_i()
+# calc_sharpe()
+
+
+def get_risc():
+    riscs = []
+    prices = []
+    for i in range(0, 2476):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(246, 2725):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(494, 2971):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(743, 3216):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(990, 3465):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(1236, 3711):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(1484, 3958):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(1731, 4207):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(1978, 4451):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(2228, 4699):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(2477, 4947):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(2726, 5197):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(2972, 5442):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(3217, 5689):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(3466, 5933):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    prices = []
+    for i in range(3712, 6181):
+        prices.append((closes[i+1]/closes[i])-1)
+    riscs.append(np.array(prices).std())
+    return riscs
+
+for risc in get_risc():
+    print(f'Risc: {risc*100}%')
