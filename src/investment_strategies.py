@@ -62,7 +62,6 @@ closes = df['Adj Close']
 2008-2018 3217-5689
 2009-2019 3466-5933
 2010-2020 3712-6181
-
 '''
 
 def calc_i():
@@ -110,10 +109,65 @@ def calc_sharpe():
 #             invest
 
 
+def get_next_valid_day(date):
+    '''
+    receives a date in this format: '1996-01-01' and output the next valid day,
+    that is, a day that the stock exchange was opened and there is data.
+    '''
+    date = date.split('-')
+    year = int(date[0])
+    month = int(date[1])
+    day = int(date[2])
+    for year in range(year,2021):
+        for month in range(month, 13):
+            for day in range(day+1,32):
+                date = make_date(year, month, day)
+                try:
+                    price = closes[date]
+                    return date
+                except:
+                    continue
+            day = 1
+        month = 1
+    return 'THERE IS NO NEXT VALID DAY'
+
+def make_date(year, month, day):
+    '''
+    very simple function that adds '0' to days and months if <=9, then
+    concatenates year-month-day to create a date.
+    '''
+    if month <= 9:
+        month = '0' + str(month)
+    if day <= 9:
+        day = '0' + str(day)
+    date = f'{year}-{month}-{day}'
+    return date
+
+def is_before(date1, date2):
+    date1 = date1.split('-')
+    year1 = int(date1[0])
+    month1 = int(date1[1])
+    day1 = int(date1[2])
+
+    date2 = date2.split('-')
+    year2 = int(date2[0])
+    month2 = int(date2[1])
+    day2 = int(date2[2])
+
+    if year1 != year2:
+        if year1 < year2:
+            return True
+        return False
+    if month1 != month2:
+        if month1 < month2:
+            return True
+        return False
+    if day1 < day2:
+        return True
+    return False
 
 # print_calc_i()
 # calc_sharpe()
-
 
 def get_risc():
     riscs = []
@@ -183,5 +237,10 @@ def get_risc():
     riscs.append(np.array(prices).std())
     return riscs
 
-for risc in get_risc():
-    print(f'Risc: {risc*100}%')
+# year = 1995
+# wallets = calc_i()
+# for i, risc in enumerate(get_risc()):
+#     print(f'Years {year}-{year+10}')
+#     print(f'--> Risc: {risc*100:.2f}%')
+#     print(f'--> Return {wallets[i][2]*100:.2f}%\n')
+#     year = year +1
