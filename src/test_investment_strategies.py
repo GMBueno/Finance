@@ -25,6 +25,76 @@ class Test(unittest.TestCase):
         self.assertNotEqual('2000-01-1', invest.make_date(2000, 1, 1))
         self.assertNotEqual('2000-1-1', invest.make_date(2000, 1, 1))
 
+    def test_buy24mo_hold10y_sellonce(self):
+        '''
+        tests the following strategy:
+        invest monthly (100/24) for 2 years, withdraw everything once after 10y...
+        '''
+        start_year = 1995
+        hold_period = 10
+        investment = 100.0
+        invests = []
+        rets = []
+        for yy in range(start_year, start_year+2):
+            for mm in range(1,13):
+                start_close = invest.get_first_close_of_month(yy, month=mm)
+                end_close = invest.get_first_close_of_year(start_year+hold_period)
+                ret = end_close/start_close
+                invests.append(ret*investment)
+                rets.append(ret-1)
+        invests = np.array(invests)
+        current_balance = np.sum(invests)/len(invests)
+        multiplier = current_balance/investment
+        ret = 100 * (multiplier-1)
+        annual_multiplier = (multiplier**(1/float(10)))
+        annual_ret = 100*(annual_multiplier-1)
+        self.assertAlmostEqual(current_balance, 564.08, delta=0.1)
+        self.assertAlmostEqual(annual_ret, 18.89, delta=0.1)
+        self.assertAlmostEqual(ret, 464.08, delta=0.1)
+
+    def test_buy24mo_hold12y_sellonce(self):
+        '''
+        tests the following strategy:
+        invest monthly (100/24) for 2 years, withdraw everything once after 10y...
+        '''
+        start_year = 1995
+        hold_period = 12
+        investment = 100.0
+        invests = []
+        rets = []
+        for yy in range(start_year, start_year+2):
+            for mm in range(1,13):
+                start_close = invest.get_first_close_of_month(yy, month=mm)
+                end_close = invest.get_first_close_of_year(start_year+hold_period)
+                ret = end_close/start_close
+                invests.append(ret*investment)
+                rets.append(ret-1)
+        invests = np.array(invests)
+        current_balance = np.sum(invests)/len(invests)
+        multiplier = current_balance/investment
+        ret = 100 * (multiplier-1)
+        annual_multiplier = (multiplier**(1/float(10)))
+        annual_ret = 100*(annual_multiplier-1)
+        self.assertAlmostEqual(current_balance, 995.24, delta=0.1)
+        # self.assertAlmostEqual(annual_ret, 18.89, delta=0.1)
+        # self.assertAlmostEqual(ret, 464.08, delta=0.1)
+
+    def test_buyonce_hold10y_sellonce(self):
+        '''
+        tests the following strategy:
+        invest R$100 once and withdraw everything ten years later, also once;
+        '''
+        investment = 100.0
+        close1 = invest.get_first_close_of_year(1995)
+        close2 = invest.get_first_close_of_year(2005)
+        current_balance = (close2/close1)*100
+        multiplier = close2/close1
+        ret = 100*(multiplier-1)
+        annual_multiplier = (multiplier**(1/float(10)))
+        annual_ret = 100*(annual_multiplier-1)
+        self.assertAlmostEqual(current_balance, 598.05, delta=0.1)
+        self.assertAlmostEqual(annual_ret, 19.58, delta=0.1)
+        self.assertAlmostEqual(ret, 498.05, delta=0.1)
 
     def test_isupper(self):
         self.assertTrue('FOO'.isupper())
