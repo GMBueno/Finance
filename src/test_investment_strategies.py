@@ -84,17 +84,11 @@ class Test(unittest.TestCase):
         tests the following strategy:
         invest R$100 once and withdraw everything ten years later, also once;
         '''
-        investment = 100.0
-        close1 = invest.get_first_close_of_year(1995)
-        close2 = invest.get_first_close_of_year(2005)
-        current_balance = (close2/close1)*100
-        multiplier = close2/close1
-        ret = 100*(multiplier-1)
-        annual_multiplier = (multiplier**(1/float(10)))
-        annual_ret = 100*(annual_multiplier-1)
-        self.assertAlmostEqual(current_balance, 598.05, delta=0.1)
-        self.assertAlmostEqual(annual_ret, 19.58, delta=0.1)
-        self.assertAlmostEqual(ret, 498.05, delta=0.1)
+        pct_ret = invest.buyonce_hold10y_sellonce(year=1995, month=1)
+        self.assertAlmostEqual(pct_ret, 498.05, delta=0.1)
+        
+        annual_pct_ret = invest.get_annual_pct_return(pct_ret=pct_ret, years=10)
+        self.assertAlmostEqual(annual_pct_ret, 19.58, delta=0.1)
 
     def test_isupper(self):
         self.assertTrue('FOO'.isupper())

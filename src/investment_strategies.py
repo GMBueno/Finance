@@ -163,3 +163,41 @@ def load_returns():
 
     print(f'avg 10-year return: {avg_ret:.2f}%')
     print(f'avg 10-year risk: {avg_risk:.2f}%')
+
+def simulate_buyonce_hold10y_sellonce():
+    pct_rets = []
+    annual_pct_rets = []
+    hold_period = 10
+    for start_year in range(1995, 2010):
+        for month in range(1, 13):
+            '''get overall percentage return on investment'''
+            pct_ret = buyonce_hold10y_sellonce(year=start_year, month=month)
+            pct_rets.append(pct_ret)
+
+            '''get annual pct_return on investment'''
+            annual_pct_rets.append(get_annual_pct_return(pct_ret, hold_period))
+
+    sum = 0
+    for annual_pct_ret in annual_pct_rets:
+        sum += annual_pct_ret
+    avg = sum/float(len(annual_pct_rets))
+    return avg
+
+
+
+def buyonce_hold10y_sellonce(*, year, month=1, hold_period=10):
+    '''
+    tests the following strategy:
+    invest R$100 once and withdraw everything ten years later, also once;
+    '''
+    close1 = get_first_close_of_month(year, month)
+    close2 = get_first_close_of_month(year+hold_period, month)
+    multiplier = close2/close1
+    pct_ret = 100*(multiplier-1)
+    return pct_ret
+
+def get_annual_pct_return(pct_ret, years):
+    multiplier = pct_ret/100.0 + 1
+    annual_multiplier = multiplier**(1/float(years))
+    annual_ret = 100*(annual_multiplier-1)
+    return annual_ret

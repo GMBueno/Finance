@@ -3,8 +3,10 @@ import pandas_datareader.data as web
 import numpy as np
 import investment_strategies as invest
 import unittest
+from pprint import pprint as pp
 
 # invest.load_returns()
+DEBUG = False
 
 def calc_ii():
     start_year = 1995
@@ -13,23 +15,10 @@ def calc_ii():
     invests = []
     rets = []
 
-    '''
-    tests the following strategy:
-    invest R$100 once and withdraw everything ten years later, also once;
-    '''
-    close1 = invest.get_first_close_of_year(start_year)
-    close2 = invest.get_first_close_of_year(start_year+hold_period)
-    current_balance = (close2/close1)*100
-    multiplier = close2/close1
-    ret = 100*(multiplier-1)
-    annual_multiplier = (multiplier**(1/float(hold_period)))
-    annual_ret = 100*(annual_multiplier-1)
-    print(f'One-time Entry in 1995. One-time sell after 10y.')
-    print(f'\tInital Investment: {investment}')
-    print(f'\tCurrent Balance: {current_balance:.2f}')
-    print(f'\tAnnual Return: {annual_ret:.2f}%')
-    print(f'\tOverall Return: {ret:.2f}%\n')
+    avg = invest.simulate_buyonce_hold10y_sellonce()
+    print(f'Average annual return on 1995-2020: {avg:.2f}%')
 
+def strat():
     '''
     tests the following strategy:
     invest monthly (100/24) for 2 years, withdraw everything once after 10y...
@@ -114,4 +103,8 @@ def calc_ii():
     print(f'\tAnnual Return: {annual_ret:.2f}%')
     print(f'\tOverall Return: {ret:.2f}%')
     print(f'\tnote: due to 2008 crash, market in 2015 was still similar to 2007\n')
+
+
+
+
 calc_ii()
