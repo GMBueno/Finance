@@ -24,17 +24,11 @@ A prova de balas
 > uma crise. 
 > - Louise Barsi
 
-- bancos; 
-- seguros; 
-- telecomunicações; 
-- energia; 
-- saneamento.
-
-bradesco (BBDC4 2008), banco do brasil (bbas3 2000)
-Telefônica (VIVT4) (2003) e Telebras (2008)
-Copel cple3 (2000) e cpfl energia (cpfe3) (2006)
-sanepar (sapr3) (2008) e sabesp (SBSP3) (2007)
-
+- bancos;               (ex: Bradesco (BBDC4) e Banco do Brasil (BBAS3))
+- seguros;              (ex: Sul América (SULA11) e BB Seguridade (BBSE3))
+- telecomunicações;     (ex: Telefônica (VIVT4) e Telebrás (TELB4))
+- energia;              (ex: Copel (CPLE3) e CPFL energia (CPFE3))
+- saneamento.           (ex: sanepar (SAPR3) e sabesp (SBSP3))
 
 
 A prova de Barsi
