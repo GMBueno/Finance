@@ -1,10 +1,11 @@
 import pandas as pd
 import pandas_datareader.data as web
 import numpy as np
-import investment_strategies as invest
+from investment_strategies import InvestmentStrategies
 from investment_utils import InvestUtils
 import unittest
 
+inv_strats = InvestmentStrategies('^BVSP')
 inv_utils = InvestUtils('^BVSP')
 
 # print('true:', invest.is_before('1996-01-01', '1996-01-02'))
@@ -53,7 +54,7 @@ class Test(unittest.TestCase):
         tests the following strategy:
         invest R$100 once and withdraw everything ten years later, also once;
         '''
-        pct_ret = invest.buyonce_hold10y_sellonce(start_year=1995, month=1)
+        pct_ret = inv_strats.buyonce_hold10y_sellonce(start_year=1995, month=1)
         self.assertAlmostEqual(pct_ret, 498.05, delta=0.1)
         
         annual_pct_ret = inv_utils.get_annual_pct_return(pct_ret=pct_ret, years=10)

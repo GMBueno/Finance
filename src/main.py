@@ -1,15 +1,16 @@
 import pandas as pd
 import pandas_datareader.data as web
 import numpy as np
-import investment_strategies as invest
+from investment_strategies import InvestmentStrategies
 import unittest
 from pprint import pprint as pp
 
-# invest.load_returns()
+inv_strats = InvestmentStrategies('^BVSP')
+# inv_strats.load_returns()
 DEBUG = False
 
 def calc_i():
-    avg_ret_and_risk = invest.simulate_buyonce_hold10y_sellonce()
+    avg_ret_and_risk = inv_strats.simulate_buyonce_hold10y_sellonce()
     avg_annual_pct_ret = avg_ret_and_risk['avg_annual_pct_ret']
     avg_risk = avg_ret_and_risk['avg_risk']
     print(f'Strategy: Buy once, Hold 10y, Sell once')
@@ -17,14 +18,18 @@ def calc_i():
     print(f'Average Risk: {avg_risk:.2f}%')
 
 def calc_ii():
-    avg_ret_and_risk = invest.simulate_buy24mo_hold10y_sellonce()
+    avg_ret_and_risk = inv_strats.simulate_buy24mo_hold10y_sellonce()
     avg_annual_pct_ret = avg_ret_and_risk['avg_annual_pct_ret']
     avg_risk = avg_ret_and_risk['avg_risk']    
     print(f'Strategy: Buy 24mo, Hold 10y, Sell once')
     print(f'Average annual return: {avg_annual_pct_ret:.2f}%')
     print(f'Average Risk: {avg_risk:.2f}%')
 
+def calc_wallet_1():
+    pass
 
+def calc_wallet_2():
+    pass
 
 def strat():
     '''
