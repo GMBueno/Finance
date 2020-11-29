@@ -1,21 +1,6 @@
 ```sh
-python main.py
+python src/main.py
 ```
-
-![S&P500 correlation matrix](static/sp500_correlation_matrix.png)
-
-_notes:_   
-_Often enough competing companies will showcase a negative correlation
-around the time of an important announcement. That said, the previous matrix
-represents ~20 years of data, so we are not going to see this very narrow-timed
-correlations._     
-_Also, there are no negative numbers closer to -1 than to 0 because
-we are biased by S&P 500, meaning that given two stocks with that correlation,
-only one would be in the S&P 500, because the other would have had a dip in
-price and would be removed from S&P 500 long before getting close to -1._
-
-![Tesla (NASDAQ: TSLA) Stock price (US Dollars) 2010-2020](static/tslaplot.png)
-
 
 A prova de balas
 
@@ -41,6 +26,27 @@ A prova de Barsi
 - frigoríficos;         (ex: Brasil Foods (BRFS3) e JBS (JBSS3))
 - aviação e turismo;    (ex: Gol (GOLL4) e CVC (CVCB3))
 - construção civil.     (ex: Cyrela (CYRE3) e Direcional Engenharia (DIRR3))
+
+We simulated both wallets and here is the outcome: (spoiler: Barsi is right!)
+![Simulating Barsi's wallets](static/terminal_ss.png)
+
+
+Other infos:
+
+![S&P500 correlation matrix](static/sp500_correlation_matrix.png)
+
+_notes:_   
+_Often enough competing companies will showcase a negative correlation
+around the time of an important announcement. That said, the previous matrix
+represents ~20 years of data, so we are not going to see this very narrow-timed
+correlations._     
+_Also, there are no negative numbers closer to -1 than to 0 because
+we are biased by S&P 500, meaning that given two stocks with that correlation,
+only one would be in the S&P 500, because the other would have had a dip in
+price and would be removed from S&P 500 long before getting close to -1._
+
+![Tesla (NASDAQ: TSLA) Stock price (US Dollars) 2010-2020](static/tslaplot.png)
+
 
 
 
