@@ -1,5 +1,8 @@
-import investment_utils as inv_utils
+from investment_utils import InvestUtils
 import numpy as np
+
+inv_utils = InvestUtils('^BVSP')
+
 
 '''
 Compare the following investment strategies, showing which had the highest

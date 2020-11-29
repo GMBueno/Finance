@@ -2,7 +2,6 @@ import pandas as pd
 import pandas_datareader.data as web
 import numpy as np
 import investment_strategies as invest
-import investment_utils as inv_utils # let's get rid of this dependency
 import unittest
 from pprint import pprint as pp
 

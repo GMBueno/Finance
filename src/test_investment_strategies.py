@@ -2,8 +2,10 @@ import pandas as pd
 import pandas_datareader.data as web
 import numpy as np
 import investment_strategies as invest
-import investment_utils as inv_utils
+from investment_utils import InvestUtils
 import unittest
+
+inv_utils = InvestUtils('^BVSP')
 
 # print('true:', invest.is_before('1996-01-01', '1996-01-02'))
 
