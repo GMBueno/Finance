@@ -18,8 +18,14 @@ class InvestUtils:
         date2 = self.get_next_valid_day(date2, try_current=True)
         initial_price = self.closes[date1]
         final_price = self.closes[date2]
-        appreciation = 100 * ((final_price/initial_price)-1)
-        return appreciation
+        pct_ret = 100 * ((final_price/initial_price)-1)
+        return pct_ret
+
+    def get_all_return(self):
+        initial_price = self.closes[0]
+        final_price = self.closes[len(self.closes)-1]
+        pct_ret = 100 * ((final_price/initial_price)-1)
+        return pct_ret       
 
     def get_first_close_of_year(self, year):
         date = f'{year}-01-01'
@@ -177,7 +183,7 @@ class InvestUtils:
         print(f'avg 10-year risk: {avg_risk:.2f}%')
 
     def get_annual_pct_return(self, *, pct_ret, years):
-        multiplier = pct_ret/100.0 + 1
+        multiplier = float(pct_ret)/100.0 + 1
         annual_multiplier = multiplier**(1/float(years))
-        annual_ret = 100*(annual_multiplier-1)
-        return annual_ret
+        annual_pct_ret = 100*(annual_multiplier-1)
+        return annual_pct_ret
