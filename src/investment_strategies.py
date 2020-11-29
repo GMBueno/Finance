@@ -41,7 +41,7 @@ class InvestmentStrategies:
                     first getting valid start and end dates
                 '''
                 end_year = start_year+hold_period
-                risk = self.inv_utils.get_monthly_risk(start_y=start_year, month=month, end_year=end_year)
+                risk = self.inv_utils.get_monthly_risk(start_y=start_year, start_month=month, end_year=end_year, end_month=month)
                 risks.append(risk)
 
         ''' calculate average annual return of multiple wallets '''
@@ -96,7 +96,7 @@ class InvestmentStrategies:
                     first getting valid start and end dates
                 '''
                 end_year = start_year+hold_period+invest_period
-                risk = self.inv_utils.get_monthly_risk(start_y=start_year, month=month, end_year=end_year, invest_period=2)
+                risk = self.inv_utils.get_monthly_risk(start_y=start_year, start_month=month, end_year=end_year, end_month=month, invest_period=2)
                 risks.append(risk)
 
 

@@ -16,17 +16,17 @@ def calc_i():
     avg_ret_and_risk = inv_strats.simulate_buyonce_hold10y_sellonce()
     avg_annual_pct_ret = avg_ret_and_risk['avg_annual_pct_ret']
     avg_risk = avg_ret_and_risk['avg_risk']
-    print(f'Strategy: Buy once, Hold 10y, Sell once')
-    print(f'Average annual return: {avg_annual_pct_ret:.2f}%')
-    print(f'Average Risk: {avg_risk:.2f}%')
+    print(f'==> Strategy: Buy once, Hold 10y, Sell once')
+    print(f'\tAverage annual return: {avg_annual_pct_ret:.2f}%')
+    print(f'\tAverage Risk: {avg_risk:.2f}%')
 
 def calc_ii():
     avg_ret_and_risk = inv_strats.simulate_buy24mo_hold10y_sellonce()
     avg_annual_pct_ret = avg_ret_and_risk['avg_annual_pct_ret']
     avg_risk = avg_ret_and_risk['avg_risk']    
-    print(f'Strategy: Buy 24mo, Hold 10y, Sell once')
-    print(f'Average annual return: {avg_annual_pct_ret:.2f}%')
-    print(f'Average Risk: {avg_risk:.2f}%')
+    print(f'==> Strategy: Buy 24mo, Hold 10y, Sell once')
+    print(f'\tAverage annual return: {avg_annual_pct_ret:.2f}%')
+    print(f'\tAverage Risk: {avg_risk:.2f}%')
 
 def calc_wallet_1():
     ''' we are going to invest 10% in each of 10 companies and get our return'''
@@ -49,10 +49,13 @@ def calc_wallet_1():
     overall_return = sum(pct_rets)/len(pct_rets)
     ''' calculates yearly return'''
     annual_pct_ret = inv_utils.get_annual_pct_return(pct_ret=overall_return, years=7.5)
+    ''' calculates risk'''
+    risk = inv_utils.get_monthly_risk(start_y=2014, start_month=1, end_year=2020, end_month=7)
 
     print(f'==> Bullet proof wallet')
-    print(f'\tOverall return:{overall_return:.2f}%')
-    print(f'\tAnnual return: {annual_pct_ret:.2f}%')
+    print(f'\tOverall return:\t{overall_return:.2f}%')
+    print(f'\tAnnual return:\t{annual_pct_ret:.2f}%')
+    print(f'\tRisk:\t\t{risk:.2f}%')
 
 
 
@@ -76,10 +79,13 @@ def calc_wallet_2():
     overall_return = sum(pct_rets)/len(pct_rets)
     ''' calculates yearly return'''
     annual_pct_ret = inv_utils.get_annual_pct_return(pct_ret=overall_return, years=7.5)
+    ''' calculates risk'''
+    risk = inv_utils.get_monthly_risk(start_y=2014, start_month=1, end_year=2020, end_month=7)
 
     print(f'==> Barsi proof wallet')
-    print(f'\tOverall return:{overall_return:.2f}%')
-    print(f'\tAnnual return: {annual_pct_ret:.2f}%')
+    print(f'\tOverall return:\t{overall_return:.2f}%')
+    print(f'\tAnnual return:\t{annual_pct_ret:.2f}%')
+    print(f'\tRisk:\t\t{risk:.2f}%')
 
 def strat():
     '''
@@ -143,10 +149,21 @@ def strat():
     print(f'\tOverall Return: {ret:.2f}%')
     print(f'\tnote: due to 2008 crash, market in 2015 was still similar to 2007\n')
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
-
-
-# calc_i()
-# calc_ii()
+print(f'{bcolors.OKBLUE}Simulating two invesment strategies...{bcolors.ENDC}')
+calc_i()
+calc_ii()
+print('')
+print(f'{bcolors.OKBLUE}Simulating two recommmended wallets...{bcolors.ENDC}')
 calc_wallet_1()
 calc_wallet_2()

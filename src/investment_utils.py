@@ -111,17 +111,15 @@ class InvestUtils:
         risk = 100 * np.array(prices).std()
         return risk
 
-    def get_monthly_risk(self, *, start_y, month, end_year, invest_period=0):
-        start_date = self.make_date(start_y, month, 1)
+    def get_monthly_risk(self, *, start_y, start_month, end_year, end_month, invest_period=0):
+        start_date = self.make_date(start_y, start_month, 1)
         start_date = self.get_next_valid_day(start_date, try_current=True)
-        next_date = self.make_date(start_y, month, 1)
-
-        hold_period = 10
-        end_date = self.make_date(start_y+hold_period+invest_period, month, 1)
+        next_date = start_date
         start_date = self.get_next_valid_day(start_date, try_current=False)
+        end_date = self.make_date(end_year, end_month, 1)
         
         prices = []
-        next_month = month
+        next_month = start_month
         curr_year = start_y
         curr_date = start_date
 
