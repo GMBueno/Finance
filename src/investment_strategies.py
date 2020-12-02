@@ -22,20 +22,15 @@ class InvestmentStrategies:
     def __init__(self, stock_ticker):
         self.inv_utils = InvestUtils(stock_ticker)
 
-    def simulate_buyonce_hold10y_sellonce(self):
+    def simulate_buyonce_hold10y_sellonce(self, start_y, end_y):
         pct_rets = []
-        annual_pct_rets = []
         hold_period = 10
         risks = []
-        for start_year in range(1995, 2010):
+        for start_year in range(start_y, end_y):
             for month in range(1, 13):
                 '''get overall percentage return on investment'''
                 pct_ret = self.buyonce_hold10y_sellonce(start_year=start_year, month=month)
                 pct_rets.append(pct_ret)
-
-                '''get annual pct_return on investment'''
-                annual_pct_ret = self.inv_utils.get_annual_pct_return(pct_ret=pct_ret, years=hold_period)
-                annual_pct_rets.append(annual_pct_ret)
 
                 ''' now lets calculate risk
                     first getting valid start and end dates
@@ -45,16 +40,11 @@ class InvestmentStrategies:
                 risks.append(risk)
 
         ''' calculate average annual return of multiple wallets '''
-        sum = 0
-        for annual_pct_ret in annual_pct_rets:
-            sum += annual_pct_ret
-        avg_annual_pct_ret = sum/float(len(annual_pct_rets))
+        avg_pct_ret = sum(pct_rets)/len(pct_rets)
+        avg_annual_pct_ret = self.inv_utils.get_annual_pct_return(pct_ret=avg_pct_ret, years=hold_period)
 
         ''' now let's calculate avg risk'''
-        sum = 0
-        for risk in risks:
-            sum += risk
-        avg_risk = sum/float(len(risks))   
+        avg_risk = sum(risks)/float(len(risks))   
 
         response = {
             'avg_annual_pct_ret': avg_annual_pct_ret,
@@ -75,43 +65,31 @@ class InvestmentStrategies:
         return pct_ret
 
 
-    def simulate_buy24mo_hold10y_sellonce(self):
+    def simulate_buy24mo_hold10y_sellonce(self, start_y, end_y):
         pct_rets = []
-        annual_pct_rets = []
         hold_period = 10
         risks = []
         invest_period = 2
-        for start_year in range(1995, 2007):
+        for start_year in range(start_y, end_y):
             for month in range(1, 13):
                 '''get overall percentage return on investment'''
-                pct_ret = self.buy24mo_hold10y_sellonce(start_year=start_year, month=month)
+                pct_ret = self.buy24mo_hold10y_sell(start_year=start_year, month=month, sell_once=True)
                 '''append pct return to list of pct returns to calc avg later'''
                 pct_rets.append(pct_ret)
-
-                '''get annual pct_return on investment'''
-                annual_pct_ret = self.inv_utils.get_annual_pct_return(pct_ret=pct_ret, years=hold_period)
-                annual_pct_rets.append(annual_pct_ret)
 
                 ''' now lets calculate risk
                     first getting valid start and end dates
                 '''
                 end_year = start_year+hold_period+invest_period
-                risk = self.inv_utils.get_monthly_risk(start_y=start_year, start_month=month, end_year=end_year, end_month=month, invest_period=2)
+                risk = self.inv_utils.get_monthly_risk(start_y=start_year, start_month=month, end_year=end_year, end_month=month)
                 risks.append(risk)
 
-
-
         ''' calculate average annual return of multiple wallets '''
-        sum = 0
-        for annual_pct_ret in annual_pct_rets:
-            sum += annual_pct_ret
-        avg_annual_pct_ret = sum/float(len(annual_pct_rets))
+        avg_pct_ret = sum(pct_rets)/len(pct_rets)
+        avg_annual_pct_ret = self.inv_utils.get_annual_pct_return(pct_ret=avg_pct_ret, years=hold_period)
 
         ''' now let's calculate avg risk'''
-        sum = 0
-        for risk in risks:
-            sum += risk
-        avg_risk = sum/float(len(risks))   
+        avg_risk = sum(risks)/float(len(risks))   
 
         response = {
             'avg_annual_pct_ret': avg_annual_pct_ret,
@@ -119,7 +97,41 @@ class InvestmentStrategies:
         }
         return response
 
-    def buy24mo_hold10y_sellonce(self,*, start_year, month=1, hold_period=10):
+
+    def simulate_buy24mo_hold10y_sell24mo(self, start_y, end_y):
+        pct_rets = []
+        hold_period = 10
+        risks = []
+        invest_period = 2
+        sell_period = 2 
+        for start_year in range(start_y, end_y):
+            for month in range(1, 13):
+                '''get overall percentage return on investment'''
+                pct_ret = self.buy24mo_hold10y_sell(start_year=start_year, month=month, sell_once=False)
+                '''append pct return to list of pct returns to calc avg later'''
+                pct_rets.append(pct_ret)
+
+                ''' now lets calculate risk
+                    first getting valid start and end dates
+                '''
+                end_year = start_year+hold_period+invest_period+sell_period
+                risk = self.inv_utils.get_monthly_risk(start_y=start_year, start_month=month, end_year=end_year, end_month=month)
+                risks.append(risk)
+
+        ''' calculate average annual return of multiple wallets '''
+        avg_pct_ret = sum(pct_rets)/len(pct_rets)
+        avg_annual_pct_ret = self.inv_utils.get_annual_pct_return(pct_ret=avg_pct_ret, years=hold_period)
+
+        ''' now let's calculate avg risk'''
+        avg_risk = sum(risks)/float(len(risks))   
+
+        response = {
+            'avg_annual_pct_ret': avg_annual_pct_ret,
+            'avg_risk': avg_risk
+        }
+        return response
+
+    def buy24mo_hold10y_sell(self,*, start_year, month=1, hold_period=10, sell_once=True):
         ''' tests the following strategy:
             invest monthly (100/24) for 2 years, withdraw everything once after 10y...
         '''
@@ -134,15 +146,20 @@ class InvestmentStrategies:
         count_months = 0
         curr_year = start_year
 
+        sell_month = month
         while(count_months < total_months):
             if curr_month > 12:
                 curr_month = 1
                 curr_year += 1
+                if not sell_once:
+                    final_year += 1
             curr_month += 1
             count_months += 1
             
+            if not sell_once:
+                sell_month = curr_month
             start_close = self.inv_utils.get_first_close_of_month(curr_year, month=curr_month)
-            end_close = self.inv_utils.get_first_close_of_month(final_year, month=curr_month)
+            end_close = self.inv_utils.get_first_close_of_month(final_year, month=sell_month)
             multiplier = end_close/start_close
             current_balance.append(multiplier*investment)
             rets.append(multiplier-1)
