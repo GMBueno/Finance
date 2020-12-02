@@ -37,7 +37,6 @@ def calc_ibov():
     ''' gets pct return on investment '''
     inv_utils = InvestUtils(stock)
     pct_ret = inv_utils.get_all_return()
-    print(pct_ret)
     
     ''' calculates yearly return'''
     annual_pct_ret = inv_utils.get_annual_pct_return(pct_ret=pct_ret, years=6.5)
