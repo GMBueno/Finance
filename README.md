@@ -22,7 +22,7 @@ A prova de Barsi
 > pandemia"
 > - Louise Barsi.
 
-- varejo;               (ex: Lojas Americas (LAME4) e Via Varejo (VVAR3))
+- varejo;               (ex: Lojas Americanas (LAME4) e Via Varejo (VVAR3))
 - frigoríficos;         (ex: Brasil Foods (BRFS3) e JBS (JBSS3))
 - aviação e turismo;    (ex: Gol (GOLL4) e CVC (CVCB3))
 - construção civil.     (ex: Cyrela (CYRE3) e Direcional Engenharia (DIRR3))

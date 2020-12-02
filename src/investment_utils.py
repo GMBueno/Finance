@@ -21,8 +21,9 @@ class InvestUtils:
         pct_ret = 100 * ((final_price/initial_price)-1)
         return pct_ret
 
-    def get_all_return(self):
-        initial_price = self.closes[0]
+    def get_all_return(self, initial_date='2014-01-01'):
+        initial_date = self.get_next_valid_day(initial_date, try_current=True)
+        initial_price = self.closes[initial_date]
         final_price = self.closes[len(self.closes)-1]
         pct_ret = 100 * ((final_price/initial_price)-1)
         return pct_ret       
@@ -111,7 +112,7 @@ class InvestUtils:
         risk = 100 * np.array(prices).std()
         return risk
 
-    def get_monthly_risk(self, *, start_y, start_month, end_year, end_month, invest_period=0):
+    def get_monthly_risk(self, *, start_y, start_month, end_year, end_month):
         start_date = self.make_date(start_y, start_month, 1)
         start_date = self.get_next_valid_day(start_date, try_current=True)
         next_date = start_date
