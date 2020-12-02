@@ -2,7 +2,7 @@
 python src/main.py
 ```
 
-A prova de balas
+À prova de balas
 
 > São setores perenes, com produtos ou serviços tão essenciais que, 
 > independentemente do cenário, recuperam mais rápido, ou sofrem menos durante 
@@ -16,7 +16,7 @@ A prova de balas
 - saneamento.           (ex: sanepar (SAPR3) e sabesp (SBSP3))
 
 
-A prova de Barsi
+À prova de Barsi
 > "É só olhar a montanha russa, como sofreram as empresas de commodities, 
 > construção civil e aviação, que estão no olho do furacão nesta crise na 
 > pandemia"

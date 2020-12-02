@@ -149,7 +149,7 @@ def print_results():
     print(f'\tAverage annual return:\t{bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
     print(f'\tAverage Risk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}')
 
-    print('2. Advised against (retail, meat-processing, aviation, touristm & civil engineering)')
+    print('2. Advised against (retail, meat-processing, aviation, tourism & civil engineering)')
     avg_annual_pct_ret, avg_risk = calc_wallet_2()
     print(f'\tAverage annual return:\t{bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
     print(f'\tAverage Risk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}')  
