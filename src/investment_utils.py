@@ -26,7 +26,10 @@ class InvestUtils:
         initial_price = self.closes[initial_date]
         final_price = self.closes[len(self.closes)-1]
         pct_ret = 100 * ((final_price/initial_price)-1)
-        return pct_ret       
+        return pct_ret
+
+    def get_overall_pct_return(self, *, years, annual_pct_ret):
+        return (((100+annual_pct_ret)/100.0)**years)*100-100       
 
     def get_first_close_of_year(self, year):
         date = f'{year}-01-01'

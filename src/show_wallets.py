@@ -18,6 +18,12 @@ def get_wallet_A():
     df, total = get_df(stocks, div)
     return df, total
 
+def get_wallet_ibov():
+    stocks = ['^BVSP']
+    div = 503.65
+    df, total = get_df(stocks, div)
+    return df, total
+
 def get_wallet_B():
     stocks = [
         'LAME4.SA', 'VVAR3.SA', # Lojas Americanas (LAME4) e Via Varejo (VVAR3))
@@ -50,13 +56,15 @@ def show(df, total):
 
     plt.show()
 
-def show_both():
+def show_all():
     dfa, totala = get_wallet_A()
     dfb, totalb = get_wallet_B()
+    dfi, totali = get_wallet_ibov()
 
     ax1 = plt.subplot2grid((8,1), (0,0), rowspan=5, colspan=1)
     ax1.plot(dfa.index, totala)
     ax1.plot(dfb.index, totalb)
+    ax1.plot(dfi.index, totali)
 
     plt.show()
 
@@ -68,4 +76,8 @@ def show_b():
     df, total = get_wallet_B()
     show(df, total)
 
-show_both()
+def show_ibov():
+    df, total = get_wallet_ibov()
+    show(df, total)
+
+show_all()

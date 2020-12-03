@@ -31,19 +31,22 @@ def calc_iii():
     return(avg_annual_pct_ret, avg_risk)
 
 def calc_ibov():
-    ''' we are going to invest in Bovespa index (B3)'''
+    ''' simulating investiment in Bovespa index (B3)'''
     stock = '^BVSP'
 
-    ''' gets pct return on investment '''
     inv_utils = InvestUtils(stock)
+    
+    ''' gets pct return on investment '''
     pct_ret = inv_utils.get_all_return()
     
-    ''' calculates yearly return'''
+    ''' calculate yearly return'''
     annual_pct_ret = inv_utils.get_annual_pct_return(pct_ret=pct_ret, years=6.5)
-    ''' calculates risk'''
+
+    ''' calculate risk'''
     risk = inv_utils.get_monthly_risk(start_y=2014, start_month=1, end_year=2020, end_month=7)
 
-    return(annual_pct_ret, risk) 
+    overall_ret = inv_utils.get_overall_pct_return(years=6.5, annual_pct_ret=annual_pct_ret)
+    return annual_pct_ret, risk, overall_ret 
 
 
 def calc_wallet_1():
@@ -56,23 +59,7 @@ def calc_wallet_1():
         'SAPR3.SA', 'SBSP3.SA', # Sanepar (SAPR3) e Sabesp (SBSP3))
     ]
 
-    ''' gets all returns of the 10 companies '''
-    pct_rets = []
-    for stock in stocks:
-        inv_utils = InvestUtils(stock)
-        pct_ret = inv_utils.get_all_return()
-        pct_rets.append(pct_ret)
-    
-    ''' calculates overall return'''
-    overall_return = sum(pct_rets)/len(pct_rets)
-    ''' calculates yearly return'''
-    annual_pct_ret = inv_utils.get_annual_pct_return(pct_ret=overall_return, years=6.5)
-    ''' calculates risk'''
-    risk = inv_utils.get_monthly_risk(start_y=2014, start_month=1, end_year=2020, end_month=7)
-
-    return(annual_pct_ret, risk)
-
-
+    return calc_wallet(stocks)
 
 def calc_wallet_2():
     ''' we are going to invest equally in 8 companies and get our return'''
@@ -82,7 +69,9 @@ def calc_wallet_2():
         'GOLL4.SA', 'CVCB3.SA', # Gol (GOLL4) e CVC (CVCB3))
         'CYRE3.SA', 'DIRR3.SA', # Cyrela (CYRE3) e Direcional Engenharia (DIRR3))
     ]
+    return calc_wallet(stocks)
 
+def calc_wallet(stocks):
     ''' gets all returns of the 10 companies '''
     pct_rets = []
     for stock in stocks:
@@ -91,13 +80,13 @@ def calc_wallet_2():
         pct_rets.append(pct_ret)
     
     ''' calculates overall return'''
-    overall_return = sum(pct_rets)/len(pct_rets)
+    overall_ret = sum(pct_rets)/len(pct_rets)
     ''' calculates yearly return'''
-    annual_pct_ret = inv_utils.get_annual_pct_return(pct_ret=overall_return, years=6.5)
+    annual_pct_ret = inv_utils.get_annual_pct_return(pct_ret=overall_ret, years=6.5)
     ''' calculates risk'''
     risk = inv_utils.get_monthly_risk(start_y=2014, start_month=1, end_year=2020, end_month=7)
 
-    return(annual_pct_ret, risk)
+    return annual_pct_ret, risk, overall_ret 
 
 class bcolors:
     HEADER = '\033[95m'
@@ -110,8 +99,35 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def print_results():
+def print_wallets():
 
+    ''' Bovespa Index 2014-2020 '''
+
+    print('')
+    print(f'{bcolors.OKCYAN}Investment in Bovespa index...2014-2020{bcolors.ENDC}')
+    avg_annual_pct_ret, avg_risk, overall_ret = calc_ibov()
+    print(f'\tAnnual return:\t{bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
+    print(f'\tOverall return:\t{bcolors.OKGREEN}{overall_ret:.3f}%{bcolors.ENDC}')
+    print(f'\tRisk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}') 
+
+    ''' WALLETS '''
+
+    print('')
+    print(f'{bcolors.OKCYAN}Simulating two wallets...2014-2020{bcolors.ENDC}')
+
+    print('1. Recommended (banks, insurance, telecom, energy & sanitation)')
+    avg_annual_pct_ret, avg_risk, overall_ret = calc_wallet_1()
+    print(f'\tAnnual return:\t{bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
+    print(f'\tOverall return:\t{bcolors.OKGREEN}{overall_ret:.3f}%{bcolors.ENDC}')
+    print(f'\tRisk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}')
+
+    print('2. Advised against (retail, meat-processing, aviation, tourism & civil engineering)')
+    avg_annual_pct_ret, avg_risk, overall_ret = calc_wallet_2()
+    print(f'\tAnnual return:\t{bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
+    print(f'\tOverall return:\t{bcolors.OKGREEN}{overall_ret:.3f}%{bcolors.ENDC}')
+    print(f'\tRisk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}')  
+
+def print_strategies():
     ''' INVESTMENT STRATEGIES '''
 
     print(f'{bcolors.OKCYAN}Simulating invesment strategies...2000-2020{bcolors.ENDC}')
@@ -131,28 +147,5 @@ def print_results():
     print(f'\tAverage annual return: {bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
     print(f'\tAverage Risk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}')
 
-    ''' Bovespa Index 2014-2020 '''
-
-    print('')
-    print(f'{bcolors.OKCYAN}Investment in Bovespa index...2014-2020{bcolors.ENDC}')
-    avg_annual_pct_ret, avg_risk = calc_ibov()
-    print(f'\tAverage annual return:\t{bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
-    print(f'\tAverage Risk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}') 
-
-    ''' WALLETS '''
-
-    print('')
-    print(f'{bcolors.OKCYAN}Simulating two wallets...2014-2020{bcolors.ENDC}')
-
-    print('1. Recommended (banks, insurance, telecom, energy & sanitation)')
-    avg_annual_pct_ret, avg_risk = calc_wallet_1()
-    print(f'\tAverage annual return:\t{bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
-    print(f'\tAverage Risk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}')
-
-    print('2. Advised against (retail, meat-processing, aviation, tourism & civil engineering)')
-    avg_annual_pct_ret, avg_risk = calc_wallet_2()
-    print(f'\tAverage annual return:\t{bcolors.OKGREEN}{avg_annual_pct_ret:.3f}%{bcolors.ENDC}')
-    print(f'\tAverage Risk:\t\t{bcolors.WARNING}{avg_risk:.3f}%{bcolors.ENDC}')  
-
-
-print_results()
+print_wallets()
+print_strategies()
